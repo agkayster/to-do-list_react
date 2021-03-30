@@ -1,4 +1,4 @@
-.App {
+.header {
   text-align: center;
 }
 
@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.input {
+  width: 20%;
+  align-self: center;
+}
+
+/* .container {
+  display: flex;
+} */
