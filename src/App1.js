@@ -2,12 +2,15 @@ import { Component } from "react";
 import "bulma/css/bulma.min.css";
 import "./App.css";
 
+let inputStyle = {
+  color: "blue",
+};
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userInput: "",
-
+      userSubmit: [],
       userOptions: [
         {
           name: "All",
@@ -15,15 +18,13 @@ class App extends Component {
         },
         {
           name: "Completed",
-          value: "completed",
+          value: this.handleComplete,
         },
         {
           name: "Uncompleted",
-          value: "incomplete",
+          value: this.handleAdd,
         },
       ],
-      userItems: [],
-      selectedUserOption: null,
     };
   }
 
@@ -34,37 +35,27 @@ class App extends Component {
   };
 
   handleAdd = () => {
-    const { userItems, userInput } = this.state;
-    const indexAsID = userItems.length;
-
-    const itemObject = {
-      id: indexAsID,
-      value: userInput,
-      status: "incomplete",
-    };
-
-    userItems.push(itemObject);
-
+    let { userSubmit, userInput } = this.state;
+    userSubmit.push(userInput);
     this.setState({
-      userItems: userItems,
+      userSubmit: userSubmit,
       userInput: "",
     });
   };
 
-  handleComplete = (itemId) => {
-    const userItems = this.state.userItems;
-    const item = userItems.find((userItem) => {
-      return userItem.id === itemId;
-    });
-
-    if (!item) {
-      return;
-    }
-
-    item.status = "completed";
-
+  handleComplete = (name) => {
+    let styleInput = { color: "red" };
     this.setState((state) => ({
-      userItems: userItems,
+      userSubmit: state.userSubmit.map((item, index) => {
+        if (item === name) {
+          return (
+            <p key={index} style={styleInput}>
+              {item}
+            </p>
+          );
+        }
+        return item;
+      }),
     }));
   };
 
@@ -72,43 +63,27 @@ class App extends Component {
     const index = e.target.value;
     const getOptions = this.state.userOptions[index];
     this.setState({
-      selectedUserOption: getOptions.value,
+      userSubmit: getOptions.value,
     });
   };
 
   render() {
-    console.log("submit =>", this.state.userItems);
-
-    let listItems = this.state.userItems
-      .filter((userItem) => {
-        if (!this.state.selectedUserOption) {
-          return true;
-        } else {
-          return userItem.status === this.state.selectedUserOption;
-        }
-      })
-      .map((item) => {
-        return (
-          <div key={item.id}>
-            <p
-              style={{
-                color: item.status === "incomplete" ? "blue" : "red",
-              }}
-            >
-              {item.value}
-            </p>
-            ​
-            <button
-              type="button"
-              className="button"
-              onClick={() => this.handleComplete(item.id)}
-            >
-              complete
-            </button>
-          </div>
-        );
-      });
-
+    console.log("submit =>", this.state.userSubmit);
+    const { userSubmit } = this.state;
+    let newSub = userSubmit.map((item, index) => {
+      return (
+        <p key={index} style={inputStyle}>
+          {item}
+          <button
+            type="button"
+            className="button"
+            onClick={() => this.handleComplete(item)}
+          >
+            complete
+          </button>
+        </p>
+      );
+    });
     return (
       <div>
         <section className="section">
@@ -139,7 +114,7 @@ class App extends Component {
               <h3 className="header">
                 <strong>My "To-Do" List</strong>
               </h3>
-              {listItems}
+              {newSub}
             </div>
           </div>
         </section>
