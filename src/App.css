@@ -42,6 +42,36 @@
   align-self: center;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: yellow;
+  background-size: cover;
+  height: 100vh;
+}
+
+.all {
+  text-align: center;
+}
+
+.button {
+  margin-right: 40px;
+  margin-left: 5px;
+}
+
+.buttonAct {
+  margin-right: -10px;
+  margin-left: 355px;
+}
+
+.activity {
+  color: white;
+}
+
 /* .container {
   display: flex;
 } */

@@ -34,12 +34,14 @@ class App extends Component {
   };
 
   handleAdd = () => {
-    const { userItems, userInput } = this.state;
+    const newUserInput =
+      this.state.userInput[0].toUpperCase() + this.state.userInput.slice(1);
+    const { userItems } = this.state;
     const indexAsID = userItems.length;
 
     const itemObject = {
       id: indexAsID,
-      value: userInput,
+      value: newUserInput,
       status: "incomplete",
     };
 
@@ -91,20 +93,24 @@ class App extends Component {
         return (
           <div key={item.id}>
             <p
+              className="activity"
               style={{
                 color: item.status === "incomplete" ? "blue" : "red",
+                border: "2px hidden",
+                width: "100%",
+                backgroundColor: "brown",
               }}
             >
               {item.value}
+              <button
+                type="button"
+                className="button buttonAct"
+                onClick={() => this.handleComplete(item.id)}
+              >
+                complete
+              </button>
             </p>
             ​
-            <button
-              type="button"
-              className="button"
-              onClick={() => this.handleComplete(item.id)}
-            >
-              complete
-            </button>
           </div>
         );
       });
@@ -116,30 +122,36 @@ class App extends Component {
             <h1 className="header">
               <strong>Enter your activities</strong>
             </h1>
-            <input
-              className="input"
-              type="text"
-              value={this.state.userInput}
-              onChange={this.handleChange}
-            />
-            <button className="button" onClick={this.handleAdd}>
-              Submit
-            </button>
-            <div className="select">
-              <select onChange={this.handleSelect}>
-                {this.state.userOptions.map((item, index) => (
-                  <option key={index} value={index}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+
             <br />
-            <div>
-              <h3 className="header">
-                <strong>My "To-Do" List</strong>
-              </h3>
-              {listItems}
+            <div className="all">
+              <input
+                className="input"
+                type="text"
+                value={this.state.userInput}
+                onChange={this.handleChange}
+              />
+              <button className="button" onClick={this.handleAdd}>
+                Submit
+              </button>
+              <div className="select">
+                <select onChange={this.handleSelect}>
+                  {this.state.userOptions.map((item, index) => (
+                    <option key={index} value={index}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <br />
+              <div>
+                <br />
+                <h3 className="header">
+                  <strong>My "To-Do" List</strong>
+                </h3>
+                <br />
+                {listItems}
+              </div>
             </div>
           </div>
         </section>
