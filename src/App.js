@@ -1,6 +1,10 @@
 import { Component } from 'react';
 import 'bulma/css/bulma.min.css';
 import './App.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+library.add(faCheck, faTrashAlt);
 
 class App extends Component {
 	constructor(props) {
@@ -34,8 +38,14 @@ class App extends Component {
 	};
 
 	handleAdd = () => {
-		const newUserInput =
-			this.state.userInput[0].toUpperCase() + this.state.userInput.slice(1);
+		const { userInput } = this.state;
+		let newUserInput;
+		if (userInput === '') {
+			return;
+		} else {
+			newUserInput = userInput[0].toUpperCase() + userInput.slice(1);
+		}
+
 		const { userItems } = this.state;
 		const indexAsID = userItems.length;
 
@@ -106,74 +116,75 @@ class App extends Component {
 			<div>
 				<section className='section'>
 					<div className='container'>
-						<h1 className='header'>
-							<strong>Enter your activities</strong>
-						</h1>
+						<div>
+							<h1 className='header'>
+								<strong>Enter your activities</strong>
+							</h1>
 
-						<br />
-						<div className='all'>
-							<input
-								className='input'
-								type='text'
-								value={this.state.userInput}
-								onChange={this.handleChange}
-							/>
-							<button className='button' onClick={this.handleAdd}>
-								Submit
-							</button>
-							<div className='select'>
-								<select onChange={this.handleSelect}>
-									{this.state.userOptions.map((item, index) => (
-										<option key={index} value={index}>
-											{item.name}
-										</option>
-									))}
-								</select>
-							</div>
 							<br />
-							<div>
+							<div className='all'>
+								<input
+									className='input'
+									type='text'
+									value={this.state.userInput}
+									onChange={this.handleChange}
+								/>
+								<button className='button' onClick={this.handleAdd}>
+									Submit
+								</button>
+								<div className='select is-rounded'>
+									<select onChange={this.handleSelect} className='is-hovered'>
+										{this.state.userOptions.map((item, index) => (
+											<option key={index} value={index}>
+												{item.name}
+											</option>
+										))}
+									</select>
+								</div>
 								<br />
-								<h3 className='header'>
-									<strong>My "To-Do" List</strong>
-								</h3>
-								<br />
-								{this.state.userItems
-									.filter((userItem) => {
-										if (!this.state.selectedUserOption) {
-											return true;
-										} else {
-											return userItem.status === this.state.selectedUserOption;
-										}
-									})
-									.map((item) => {
-										return (
-											<div key={item.id}>
-												<p
-													className='activity'
-													style={{
-														color:
-															item.status === 'incomplete' ? 'blue' : 'red',
-														border: '2px hidden',
-														width: '100%',
-														backgroundColor: 'white',
-													}}>
-													{item.value}
-													<button
-														type='button'
-														className='button buttonAct'
-														onClick={() => this.handleComplete(item.id)}>
-														complete
-													</button>
-													<button
-														type='button'
-														className='button buttonDel'
-														onClick={() => this.handleDelete(item.id)}>
-														delete
-													</button>
-												</p>
-											</div>
-										);
-									})}
+								<div>
+									<br />
+									<h3 className='header'>
+										<strong>My "To-Do" List</strong>
+									</h3>
+									<br />
+									{this.state.userItems
+										.filter((userItem) => {
+											if (!this.state.selectedUserOption) {
+												return true;
+											} else {
+												return (
+													userItem.status === this.state.selectedUserOption
+												);
+											}
+										})
+										.map((item) => {
+											return (
+												<div key={item.id}>
+													<p
+														className='activity'
+														style={{
+															color:
+																item.status === 'incomplete' ? 'blue' : 'red',
+														}}>
+														{item.value}
+														<button
+															type='button'
+															className='button buttonAct'
+															onClick={() => this.handleComplete(item.id)}>
+															<FontAwesomeIcon icon='check' size='2x' />
+														</button>
+														<button
+															type='button'
+															className='button buttonDel'
+															onClick={() => this.handleDelete(item.id)}>
+															<FontAwesomeIcon icon='trash-alt' size='2x' />
+														</button>
+													</p>
+												</div>
+											);
+										})}
+								</div>
 							</div>
 						</div>
 					</div>
